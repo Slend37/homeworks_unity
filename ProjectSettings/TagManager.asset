@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - Coins
+  - Bullets
+  - Walls
+  - Enemy
   layers:
   - Default
   - TransparentFX
