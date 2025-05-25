@@ -1,40 +1,55 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerCollectController : MonoBehaviour
 {
-    private int score = 0;
+    public PlayerEnemyController pec;
+    private int score;
     private bool level = false;
-    private int currentLevel = 1;
+    private int currentLevel;
+    public Vector3 checkpoint;
     private Animation anim;
     [SerializeField] private TextMeshProUGUI tm;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        score = SceneManager.GetActiveScene().buildIndex * 6;
+        currentLevel = SceneManager.GetActiveScene().buildIndex * 2 + 1;
         tm = GameObject.Find("ScoreText").GetComponent<TextMeshProUGUI>();
+        checkpoint = GameObject.Find("Player").transform.position;
+        pec = GetComponent<PlayerEnemyController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if ((score == 3) && (level == false))
+        if (GameObject.Find("Player").transform.position.y < -5 && level == false)
         {
-            level = true;
-            GameObject.Find($"LevelGap{currentLevel.ToString()}").GetComponent<Animation>().Play($"Lvl{currentLevel.ToString()}");
-
+            pec.HP = 0;
         }
-        tm.SetText("Score: " + score.ToString());
-
-        if (level == true)
-        {
-            if (GameObject.Find("Player").transform.position.x > 10)
+            if ((score == 3 * currentLevel) && (level == false))
             {
-                level = false;
-                currentLevel++;
-                score = 0;
+                level = true;
+                GameObject.Find($"LevelGap{currentLevel.ToString()}").GetComponent<Animation>().Play($"Lvl{currentLevel.ToString()}");
+
             }
-        }
+            tm.SetText("Score: " + score.ToString());
+
+            if (level == true)
+            {
+                if (GameObject.Find("Player").transform.position.x > 9 * currentLevel * currentLevel)
+                {
+                    checkpoint = GameObject.Find("Player").transform.position;
+                    Debug.Log("Level changed");
+                    level = false;
+                    currentLevel++;
+                }
+                    
+
+            
+            }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
