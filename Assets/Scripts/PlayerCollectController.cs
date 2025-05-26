@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class PlayerCollectController : MonoBehaviour
 {
@@ -11,7 +12,9 @@ public class PlayerCollectController : MonoBehaviour
     private int currentLevel;
     public Vector3 checkpoint;
     private Animation anim;
+    private bool canTake = true;
     [SerializeField] private TextMeshProUGUI tm;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -62,11 +65,17 @@ public class PlayerCollectController : MonoBehaviour
     }
     IEnumerator PlayUntilDestroy(GameObject coin)
     {
-        AudioSource sound = coin.GetComponent<AudioSource>();
-        score++;
-        sound.Play();
-        yield return new WaitForSeconds(0.5f);
-        Destroy(coin);
+        if (canTake == true)
+        {
+            canTake = false;
+            AudioSource sound = coin.GetComponent<AudioSource>();
+            score++;
+            sound.Play();
+            yield return new WaitForSeconds(0.5f);
+            Destroy(coin);
+            canTake = true;
+        }
+        
     }
 
 }

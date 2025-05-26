@@ -1,5 +1,7 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
@@ -13,16 +15,20 @@ public class MenuController : MonoBehaviour
     [SerializeField] private AudioMixer musicMixer;
     private bool inPause = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+
     void Start()
     {
+
         panelMenu = GameObject.Find("Canvas");
         panelMenu = panelMenu.transform.GetChild(1).gameObject;
         playerAnimationController = GetComponent<PlayerAnimationController>();
         movementController = GetComponent<MovementController>();
-        soundSlider.value = 0.5f;
-        musicSlider.value = 0.5f;
         soundMixer.SetFloat("SoundVolume", -50);
         musicMixer.SetFloat("MusicVolume", -50);
+        musicSlider.value = 0.1f;
+        soundSlider.value = 0.1f;
+
     }
 
     // Update is called once per frame
